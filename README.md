@@ -1,68 +1,134 @@
-# Douglas-Peucker Algorithm
+\# Douglas-Peucker Algorithm
 
-GMT 211 - Data Structures and Algorithms
+
+
+GMT 211 - Data Structures and Algorithms  
 
 Hacettepe University, Department of Geomatics Engineering
 
-## What is it?
 
-The Douglas-Peucker algorithm attempts to preserve the overall shape of a polyline while reducing the number of points in the polyline. It is used in GIS map generalization, cartography, and GPS track compression.
 
-## How the Algorithm Works?
+\## What is it?
 
-1. Connect the first and last points.
-2. Calculate the **perpendicular distances** of all intermediate points to this line.
-3. Find the furthest point (dmax).
-4. If `dmax > ε` → preserve that point, split it into two parts, apply **recursive**.
-5. If `dmax ≤ ε` → delete all intermediate points.
 
-As `ε` (epsilon) increases, more points are deleted (more simplification).
 
-## Project Structure
+The Douglas-Peucker algorithm reduces the number of points in a polyline while preserving its overall shape. It is commonly used in GIS map generalization, cartography, and GPS trajectory compression.
+
+
+
+\## How Does it Work?
+
+
+
+1\. Connect the first and last point with a straight line
+
+2\. Calculate the perpendicular distance of all intermediate points to this line
+
+3\. Find the point with the maximum distance (dmax)
+
+4\. If `dmax > ε` → keep that point, split into two segments, apply \*\*recursively\*\*
+
+5\. If `dmax ≤ ε` → remove all intermediate points
+
+
+
+The larger the `ε` (epsilon), the more points are removed.
+
+
+
+\## Project Structure
+
+
 
 ```
-douglas_peucker/
+
 ├── dp/
-│ ├── __init__.py # package definition
-│ ├── algorithm.py # DP algorithm
-│ └── io_utils.py # file reading/writing
-├── main.py # main working file
-├── test_dp.py # tests
-├── line.txt # sample txt input
-└── README.md
+
+│   ├── \_\_init\_\_.py       # package definition
+
+│   ├── algorithm.py      # DP algorithm
+
+│   └── io\_utils.py       # file read/write operations
+
+├── main.py               # main script
+
+├── test\_dp.py            # unit tests
+
+├── line.txt              # sample text input
+
+├── Trabzon.geojson       # Trabzon coastline data (raw)
+
+├── Trabzon\_wgs84.geojson # Trabzon coastline data (WGS84)
+
+└── out.geojson           # simplified output after DP
+
 ```
 
-## Usage
-### With GeoJSON file:
+
+
+\## Usage
+
+
+
 ```python
-from dp import *
-input_file = 'bodrum.geojson'
-out_file = 'out.geojson'
+
+from dp import \*
+
+
+
+input\_file = 'Trabzon\_wgs84.geojson'
+
+out\_file = 'out.geojson'
+
 epsilon = 0.01
 
-execute_douglas_peucker(input_file, out_file, epsilon)
+
+
+execute\_douglas\_peucker(input\_file, out\_file, epsilon)
+
 ```
-### With a text file:
-```python
-from dp import *
 
-input_line = convert_coordinates_to_line('line.txt')
-result = douglas_peucker(input_line, epsilon=6)
-for point in result:
-print(point[0], point[1])
+
+
+\## Running Tests
+
+
+
 ```
-## Running Tests
 
-```bash
-python test_dp.py
+python test\_dp.py
+
 ```
-## Requirements
 
-- Python 3.x
-- No external libraries required (numpy/scipy not used)
 
-## Limitations
 
-- Not globally optimal as it is a greedy approach
-- Sensitive to ε selection
-- Can oversimplify sharp features
+Expected output:
+
+\- epsilon = 6 → \[(1.0, 2.0), (8.0, 6.0)]
+
+\- epsilon = 0.1 → \[(1.0, 2.0), (6.0, -2.0), (9.0, 4.0), (8.0, 6.0)]
+
+
+
+\## Requirements
+
+
+
+\- Python 3.x
+
+\- No external libraries required (numpy/scipy not used)
+
+
+
+\## Limitations
+
+
+
+\- Greedy approach, not globally optimal
+
+\- Sensitive to epsilon selection
+
+\- May oversimplify sharp features
+
+
+
