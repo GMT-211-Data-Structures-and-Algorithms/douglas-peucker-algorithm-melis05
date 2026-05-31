@@ -1,6 +1,6 @@
 from dp import *
 
-input_file = 'Trabzon.geojson'
+input_file = 'Trabzon_wgs84.geojson'
 out_file = 'out.geojson'
 
 epsilon = 0.01
